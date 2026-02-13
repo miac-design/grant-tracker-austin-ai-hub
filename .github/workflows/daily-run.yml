@@ -1,0 +1,75 @@
+name: Daily Grant Finder Run
+
+on:
+  schedule:
+    # Run daily at 2 PM UTC (adjust for your timezone)
+    - cron: '0 14 * * *'
+  workflow_dispatch:  # Allow manual runs
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Create credentials directory
+      run: mkdir -p creds
+    
+    - name: Decrypt Google service account
+      run: |
+        echo "${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}" > creds/service_account.json
+      env:
+        GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+    
+    - name: Create environment file
+      run: |
+        cat > .env << EOF
+        GOOGLE_SERVICE_ACCOUNT_JSON_PATH=./creds/service_account.json
+        GOOGLE_SHEET_NAME=${{ secrets.GOOGLE_SHEET_NAME }}
+        GOOGLE_SHEET_TAB=${{ secrets.GOOGLE_SHEET_TAB }}
+        GRANTSGOV_API_KEY=${{ secrets.GRANTSGOV_API_KEY }}
+        SBIR_API_BASE=https://www.sbir.gov/api/solicitations.json
+        SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}
+        SMTP_HOST=${{ secrets.SMTP_HOST }}
+        SMTP_PORT=${{ secrets.SMTP_PORT }}
+        SMTP_USER=${{ secrets.SMTP_USER }}
+        SMTP_PASS=${{ secrets.SMTP_PASS }}
+        EMAIL_FROM=${{ secrets.EMAIL_FROM }}
+        EMAIL_TO=${{ secrets.EMAIL_TO }}
+        TIMEZONE=${{ secrets.TIMEZONE || 'America/Chicago' }}
+        ALERT_WINDOW_DAYS=${{ secrets.ALERT_WINDOW_DAYS || '45' }}
+        OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+        EOF
+    
+    - name: Run pipeline
+      run: |
+        python -m src.pipeline
+    
+    - name: Upload database as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: opportunities-db
+        path: opportunities.db
+        retention-days: 30
+    
+    - name: Upload logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: pipeline-logs
+        path: |
+          grant_finder.log
+          logs/
+        retention-days: 7
+      if: always()  # Upload logs even if pipeline fails 
