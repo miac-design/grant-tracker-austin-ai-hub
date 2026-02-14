@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nonprofit Resource Intelligence — Grant &amp; Software Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.3);
+        }
+
+        .card h3 {
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .card .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .endpoints {
+            margin-top: 2rem;
+        }
+
+        .endpoints a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 0.25rem;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .endpoints a:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <span class="badge">Austin AI Hub</span>
+            <h1>Nonprofit Resource Intelligence</h1>
+            <p>Grant &amp; Software Tracker</p>
+        </header>
+
+        <div class="cards">
+            <div class="card">
+                <div class="icon">🔍</div>
+                <h3>Grant Discovery</h3>
+                <p>Automated scanning of Grants.gov and SBIR.gov for relevant AI and dental technology funding
+                    opportunities.</p>
+            </div>
+            <div class="card">
+                <div class="icon">📊</div>
+                <h3>Fit Scoring</h3>
+                <p>AI-powered scoring ranks each opportunity by relevance, deadline urgency, and award potential.</p>
+            </div>
+            <div class="card">
+                <div class="icon">⚡</div>
+                <h3>Pipeline Automation</h3>
+                <p>Scheduled scans keep the database current with deduplication and change tracking built in.</p>
+            </div>
+        </div>
+
+        <div class="status">
+            <p><span class="dot"></span> System Online</p>
+        </div>
+
+        <div class="endpoints" style="text-align:center;">
+            <p style="color:#94a3b8; margin-bottom:0.75rem; font-size:0.9rem;">API Endpoints</p>
+            <a href="/api/healthz">/healthz</a>
+            <a href="/api/latest">/latest</a>
+            <a href="/api/opportunities">/opportunities</a>
+            <a href="/api/stats">/stats</a>
+            <a href="/api/docs">/docs</a>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Austin AI Hub &middot; Nonprofit Resource Intelligence</p>
+        </footer>
+    </div>
+</body>
+
+</html>
